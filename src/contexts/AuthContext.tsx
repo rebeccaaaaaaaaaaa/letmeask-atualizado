@@ -1,10 +1,5 @@
-import { ReactNode, createContext, useState, useEffect } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 import { auth, firebase } from "../services/firebase";
-
-type AuthContextType = {
-  user: User | undefined;
-  signInWithGoogle: () => Promise<void>;
-};
 
 type User = {
   id: string;
@@ -12,13 +7,18 @@ type User = {
   avatar: string;
 };
 
-type AuthContexProviderProps = {
+type AuthContextType = {
+  user: User | undefined;
+  signInWithGoogle: () => Promise<void>;
+};
+
+type AuthContextProviderProps = {
   children: ReactNode;
 };
 
 export const AuthContext = createContext({} as AuthContextType);
 
-export function AuthContexProvider(props: AuthContexProviderProps) {
+export function AuthContextProvider(props: AuthContextProviderProps) {
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export function AuthContexProvider(props: AuthContexProviderProps) {
         const { displayName, photoURL, uid } = user;
 
         if (!displayName || !photoURL) {
-          throw new Error("Missin Informarion from Ggoole Account");
+          throw new Error("Missing information from Google Account.");
         }
 
         setUser({
@@ -52,7 +52,7 @@ export function AuthContexProvider(props: AuthContexProviderProps) {
       const { displayName, photoURL, uid } = result.user;
 
       if (!displayName || !photoURL) {
-        throw new Error("Missin Informarion from Ggoole Account");
+        throw new Error("Missing information from Google Account.");
       }
 
       setUser({
